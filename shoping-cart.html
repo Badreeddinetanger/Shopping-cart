@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+      /*i made css and js files in the html*/
+        /* thi is the css*/
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cart-item .item-actions button {
+            cursor: pointer;
+        }
+        h1{
+          padding-left: 30%;
+        }
+        .like-btn {
+            color: gray;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+
+    <div id="cart">
+        <!-- this is the Cart item -->
+        <div class="cart-item">
+            <span>Item A</span>
+            <div class="item-actions">
+                <button class="decrement">-</button>
+                <span class="quantity">1</span>
+                <button class="increment">+</button>
+                <button class="delete">Delete</button>
+                <button>I love it</button>
+            </div>
+        </div>
+        <div class="cart-item">
+            <span>Item B</span>
+            <div class="item-actions">
+                <button class="decrement">-</button>
+                <span class="quantity">2</span>
+                <button class="increment">+</button>
+                <button class="delete">Delete</button>
+                <button>I love it</button>
+            </div>
+        </div>
+    </div>
+
+    <p>Total Price: $<span id="total-price">0.00</span></p>
+
+    <script>
+        
+        const cart = document.getElementById('cart');
+        const total = document.getElementById('total-price');
+
+        // le calcule du prix
+        function calculateTotalPrice() {
+            let totalPrice = 0;
+            const items = cart.querySelectorAll('.cart-item');
+            items.forEach((item) => {
+                const quantity = parseInt(item.querySelector('.quantity').textContent);
+                totalPrice += quantity;
+            });
+            total.textContent = totalPrice.toFixed(2);
+        }
+
+        // Event listener for incrementing quantity
+        cart.addEventListener('click', (e) => {
+            if (e.target.classList.contains('increment')) {
+                const quantitySpan = e.target.parentElement.querySelector('.quantity');
+                let quantity = parseInt(quantitySpan.textContent);
+                quantity++;
+                quantitySpan.textContent = quantity;
+                calculateTotalPrice();
+            }
+        });
+
+        // Event listener for decrementing quantity
+        cart.addEventListener('click', (e) => {
+            if (e.target.classList.contains('decrement')) {
+                const quantitySpan = e.target.parentElement.querySelector('.quantity');
+                let quantity = parseInt(quantitySpan.textContent);
+                if (quantity > 1) {
+                    quantity--;
+                    quantitySpan.textContent = quantity;
+                    calculateTotalPrice();
+                }
+            }
+        });
+
+        //  delete the items
+        cart.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete')) {
+                const item = e.target.parentElement.parentElement;
+                cart.removeChild(item);
+                calculateTotalPrice();
+            }
+        });
+
+        //  like the item
+        cart.addEventListener('click', (e) => {
+            if (e.target.classList.contains('like-btn')) {
+                const likeButton = e.target;
+                likeButton.classList.toggle('liked');
+            }
+        });
+        calculateTotalPrice();
+    </script>
+</body>
+</html>
